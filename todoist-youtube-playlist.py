@@ -55,6 +55,7 @@ class YouTubeVideo:
 
     def time(self):
         duration = self.duration
+
         hours = math.floor(duration / 3600)
         duration = duration - hours * 3600
         minutes = math.floor(duration / 60)
@@ -130,7 +131,18 @@ def main(argv):
 
         writer.write("\"title\",\"link\",\"time\",\"todoist\"")
 
+        showedVideos = []
+
         for item in videos.values():
+            if item.duration is None:
+                print(
+                    f"WARNING: Video with id {item.id} is hidden because it is "
+                    f"private video!")
+                continue
+            else:
+                showedVideos.append(item)
+
+        for item in showedVideos:
             writer.write("\""
                          + "\",\"".join([item.title, item.link,
                                          item.time(), item.beautify()])
